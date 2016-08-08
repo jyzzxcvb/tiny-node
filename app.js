@@ -1,25 +1,23 @@
-var redis = require("redis"),
-    client = redis.createClient();
- 
-client.on("error", function (err) {
-    console.log("Error " + err);
+var express = require('express');
+var app = express();
+
+app.use(express.static('public'));
+
+//get web interface
+app.get('/', function (req, res) {
+	res.send('Hello Express!');
 });
 
-var http = require('http');
-
-var server = http.createServer(function(req, res) {
-  res.writeHead(200);
-  res.end('Hello Http');
+//post an URL, return shortened
+app.post('/api/shorten', function (req, res) {
+	res.send('Hello Express!');
 });
-server.listen(8080);
- 
-client.set("string key", "string val", redis.print);
-client.hset("hash key", "hashtest 1", "some value", redis.print);
-client.hset(["hash key", "hashtest 2", "some other value"], redis.print);
-client.hkeys("hash key", function (err, replies) {
-    console.log(replies.length + " replies:");
-    replies.forEach(function (reply, i) {
-        console.log("    " + i + ": " + reply);
-    });
-    client.quit();
+
+//get an Tiny URL
+app.get('/:encoded', function (req, res) {
+	res.send('get!');
+});
+
+app.listen(8080, function() {
+	console.log('Example app listening on port 8080');
 });
